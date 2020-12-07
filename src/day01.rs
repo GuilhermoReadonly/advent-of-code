@@ -1,52 +1,69 @@
-const DATA: &str = include_str!("../../data/01.input");
+use advent_of_code::Solver;
 
-fn main() {
-    println!("Day 01");
+pub struct Day1Puzzle1<'a> {
+    pub data: &'a str,
+    pub sum: usize,
+}
 
-    let data = DATA
-        .lines()
-        .map(|line| line.parse::<i64>().unwrap())
-        .collect::<Vec<_>>();
+impl<'a> Solver<(usize, usize, usize, usize)> for Day1Puzzle1<'a> {
+    fn solve(&self) -> (usize, usize, usize, usize) {
+        let data = self
+            .data
+            .lines()
+            .map(|line| line.parse::<usize>().unwrap())
+            .collect::<Vec<_>>();
 
-    for elt in Combinator2::new(&data).filter(|elt| elt.0 + elt.1 == 2020) {
-        println!(
-            "Puzzle 1: {elt1} {elt2}, sum = {sum}, mul = {mul}",
-            elt1 = elt.0,
-            elt2 = elt.1,
-            sum = elt.0 + elt.1,
-            mul = elt.0 * elt.1
-        )
+        let result = Combinator2::new(&data)
+            .filter(|elt| elt.0 + elt.1 == self.sum)
+            .nth(0)
+            .expect("ergh.. something went wrong !");
+        (result.0, result.1, result.0 + result.1, result.0 * result.1)
     }
+}
 
-    for elt in Combinator3::new(&data).filter(|elt| elt.0 + elt.1 + elt.2 == 2020) {
-        println!(
-            "Puzzle 2: {elt1} {elt2} {elt3}, sum = {sum}, mul = {mul}",
-            elt1 = elt.0,
-            elt2 = elt.1,
-            elt3 = elt.2,
-            sum = elt.0 + elt.1 + elt.2,
-            mul = elt.0 * elt.1 * elt.2
+pub struct Day1Puzzle2<'a> {
+    pub data: &'a str,
+    pub sum: usize,
+}
+impl<'a> Solver<(usize, usize, usize, usize, usize)> for Day1Puzzle2<'a> {
+    fn solve(&self) -> (usize, usize, usize, usize, usize) {
+        let data = self
+            .data
+            .lines()
+            .map(|line| line.parse::<usize>().unwrap())
+            .collect::<Vec<_>>();
+
+        let result = Combinator3::new(&data)
+            .filter(|elt| elt.0 + elt.1 + elt.2 == self.sum)
+            .nth(0)
+            .expect("ergh.. something went wrong !");
+        (
+            result.0,
+            result.1,
+            result.2,
+            result.0 + result.1 + result.2,
+            result.0 * result.1 * result.2,
         )
     }
 }
 
 #[derive(Debug)]
 struct Combinator2<'a> {
-    data: &'a Vec<i64>,
+    data: &'a Vec<usize>,
     index1: usize,
     index2: usize,
 }
 
 #[derive(Debug)]
 struct Combinator3<'a> {
-    data: &'a Vec<i64>,
+    data: &'a Vec<usize>,
     index1: usize,
     index2: usize,
     index3: usize,
 }
 
 impl<'a> Combinator2<'a> {
-    fn new(data: &Vec<i64>) -> Combinator2 {
+    fn new(data: &Vec<usize>) -> Combinator2 {
         Combinator2 {
             data,
             index1: 0,
@@ -56,7 +73,7 @@ impl<'a> Combinator2<'a> {
 }
 
 impl<'a> Combinator3<'a> {
-    fn new(data: &Vec<i64>) -> Combinator3 {
+    fn new(data: &Vec<usize>) -> Combinator3 {
         Combinator3 {
             data,
             index1: 0,
@@ -67,7 +84,7 @@ impl<'a> Combinator3<'a> {
 }
 
 impl<'a> Iterator for Combinator2<'a> {
-    type Item = (i64, i64);
+    type Item = (usize, usize);
 
     fn next(&mut self) -> Option<Self::Item> {
         let mut result = None;
@@ -87,7 +104,7 @@ impl<'a> Iterator for Combinator2<'a> {
 }
 
 impl<'a> Iterator for Combinator3<'a> {
-    type Item = (i64, i64, i64);
+    type Item = (usize, usize, usize);
 
     fn next(&mut self) -> Option<Self::Item> {
         let result = if self.index3 < self.data.len() {
