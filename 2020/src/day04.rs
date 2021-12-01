@@ -1,4 +1,4 @@
-use advent_of_code::Solver;
+use advent_of_code_2020::Solver;
 
 pub struct Day4Puzzle1<'a> {
     pub data: &'a str,

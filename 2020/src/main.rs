@@ -1,4 +1,4 @@
-use advent_of_code::BenchSuite;
+use advent_of_code_2020::BenchSuite;
 
 mod day01;
 pub use day01::*;
