@@ -13,9 +13,8 @@ fn main() {
     let mut number_of_increases = 0;
 
     for depth in lines.iter() {
-
         match previous_depth {
-            None => previous_depth = Some(*depth),
+            None => (),
             Some(d) => {
                 if depth > &d {
                     number_of_increases += 1;
@@ -26,5 +25,9 @@ fn main() {
         previous_depth = Some(*depth);
     }
 
-    println!("Response of day01 part 1 : {}", number_of_increases)
+    println!("Response of day01 part 1 : {}", number_of_increases);
+
+    let window3sum: Vec<usize> = lines.windows(3).map(|w| w.into_iter().sum()).collect();
+    let increases = window3sum.windows(2).filter(|w| w[1] > w[0]).count();
+    println!("Response of day01 part 2 : {}", increases);
 }
